@@ -1,0 +1,10 @@
+node_modules
+
+.env
+
+shared/logs/*.json
+shared/ssl/*.pem
+shared/ssl/*.key
+shared/ssl/*.cert
+shared/ssl/*.crt
+shared/dist

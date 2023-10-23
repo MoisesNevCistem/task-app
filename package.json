@@ -1,0 +1,14 @@
+{
+  "name": "task-app",
+  "version": "1.0.0",
+  "description": "Aplicación para la gestion de tareas con Node JS.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js"
+  },
+  "author": "@MoisesNevCistem",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
