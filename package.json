@@ -4,11 +4,14 @@
   "description": "Aplicación para la gestion de tareas con Node JS.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "dev": "nodemon --config ./nodemon.json ./index.js"
   },
   "author": "@MoisesNevCistem",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.2",
     "nodemon": "^3.0.1"
   }
 }
