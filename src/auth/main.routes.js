@@ -1,6 +1,12 @@
 //* Importaciones globales
 const { Router } = require('express');
 
+//* Importación de dependencias
+const dependencies = require('../dependencies');
+
+//* Importación de enrutadores
+const { welcomeRouter } = require('./V1/routers')
+
 /**
  * @type {Express} Enrutador principal del ambien 'auth'.
  */
@@ -12,12 +18,6 @@ const authRouter = Router();
 const PATH_URL = '/api/v1/auth';
 
 //* Servicios de server AUTH
-authRouter.get(`${ PATH_URL }`, ( req,res ) => {
-    res.status(200);
-    res.json({
-        message: 'Hello auth....'
-    });
-    res.end();
-});
+authRouter.use(`${ PATH_URL }`, welcomeRouter( dependencies ));
 
 module.exports = { authRouter };
