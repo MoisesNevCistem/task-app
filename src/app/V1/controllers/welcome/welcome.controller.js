@@ -12,7 +12,7 @@ module.exports = ( dependencies ) => {
                 }
             });
         } catch (error) {
-            console.log('❌ WELCOME_CONTROLLER ERROR: ', error);
+            // console.log('❌ WELCOME_CONTROLLER ERROR: ', error);
             next( error );
         }
     }

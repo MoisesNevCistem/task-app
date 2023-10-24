@@ -4,12 +4,18 @@ module.exports = ( dependencies ) => {
     const { httpResponses, statusCode } = dependencies;
 
     const createTaskController = async( req, res, next ) => {
-        httpResponses.responseSuccess(res, {
-            status_code: statusCode.CREATED,
-            data: {
-                message: 'Created Task !! 😊',
-            }
-        });
+        try {
+            httpResponses.responseSuccess(res, {
+                status_code: statusCode.CREATED,
+                data: {
+                    message: 'Created Task !! 😊',
+                    body: req.body
+                }
+            });
+        } catch (error) {
+            console.log('❌ CREATE_TASK_CONTROLLER_ERROR: ', error);
+            next( error );
+        }
     }
     return createTaskController;
 };
