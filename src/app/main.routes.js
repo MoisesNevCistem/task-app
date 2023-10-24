@@ -1,6 +1,15 @@
 //* Importaciones globales
 const { Router } = require('express');
 
+//* Importación de dependencias
+const dependencies = require('../dependencies');
+
+//* Importación de enrutadores
+const { welcomeRouter } = require('./V1/routers')
+
+//* Desestructuración de dependencias
+const { httpError } = dependencies;
+
 /**
  * @type {Express} Enrutador principal del ambien 'app'.
  */
@@ -12,12 +21,10 @@ const appRouter = Router();
 const PATH_URL = '/api/v1/app';
 
 //* Servicios de server APP
-appRouter.get(`${ PATH_URL }`, ( req,res ) => {
-    res.status(200);
-    res.json({
-        message: 'Hello app....'
-    });
-    res.end();
-});
+appRouter.use(`${ PATH_URL }`, welcomeRouter( dependencies ))
+
+//* Middlewares para control de errores
+appRouter.use( httpError.serviceNotFound );
+appRouter.use( httpError.errorCaught );
 
 module.exports = { appRouter };
