@@ -19,7 +19,7 @@ const TaskState = sequelize.define('task_state', {
         primaryKey: true
     },
     uuid_task_state:{
-        field: 'uuid_state_id',
+        field: 'uuid_task_state',
         type: DataTypes.STRING,
         allowNull: false
     },

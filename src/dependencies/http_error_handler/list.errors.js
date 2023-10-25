@@ -16,7 +16,7 @@ const listErrors = {
     SERVICE_NOT_FOUND( url ){
         return responseError({
             code: 'B02',
-            message: `The services '${ url }' is not available`,
+            message: `The services '${ url }' is not available....`,
             status_code: statusCode.NOT_FOUND
         })
     },
@@ -25,6 +25,13 @@ const listErrors = {
             code: 'B03',
             message: error,
             status_code: statusCode.BAD_REQUEST
+        })
+    },
+    TASK_NOT_FOUND( ){
+        return responseOK({
+            code: 'B04',
+            message: 'The Task not found....',
+            status_code: statusCode.OK
         })
     }
 }
