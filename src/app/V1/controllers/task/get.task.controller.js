@@ -4,28 +4,28 @@ const { taskServices } = require('../../services');
 module.exports = ( dependencies ) => {
 
     //? Desestructuración de dependencias
-    const { httpResponses, statusCode, models } = dependencies;
+    const { httpError, httpResponses, statusCode, models } = dependencies;
 
     //? Centralización de servicios
     const serviceRepository = {
-        getTasks: taskServices.getTasksService(models),
+        getTask: taskServices.getTaskService({ httpError, models }),
     };
 
     /**
-     * Controlador que coordina el proceso de obtener tareas.
+     * Controlador que coordina el proceso de obtener una tarea.
      * @param {*} req - Deinificón de la solicitud realizada.
      * @param {*} res - Definición de la respuesta capturada.
      * @param {*} next - Función que continua el flujo de la aplicación.
      */
-    const getTasksController = async ( req, res, next ) => {
+    const getTaskController = async ( req, res, next ) => {
         try {
-            const serviceResponse = await serviceRepository.getTasks();
-            const { success, tasks } = serviceResponse;
+            const serviceResponse = await serviceRepository.getTask( req.params.uuid_task );
+            const { success, task } = serviceResponse;
             
             if( success ){
                 httpResponses.responseSuccess(res, {
                     status_code: statusCode.OK,
-                    data: tasks
+                    data: task || {}
                 });
             }
         } catch (error) {
@@ -34,5 +34,5 @@ module.exports = ( dependencies ) => {
         }
     };
 
-    return getTasksController;
+    return getTaskController;
 };
