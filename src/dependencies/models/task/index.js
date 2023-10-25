@@ -8,7 +8,7 @@ const { sequelize } = require('../../sequelize');
 const { TaskState } = require('../task_state');
 
 const modelConfig = {
-    tableName: 'task',
+    tableName: 'tasks',
     timestamps: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at'
@@ -37,7 +37,7 @@ const Task = sequelize.define('task', {
         allowNull: false
     },
     task_state_id:{
-        field: 'task_state_id ',
+        field: 'task_state_id',
         type: DataTypes.INTEGER,
         defaultValue: 1
     }

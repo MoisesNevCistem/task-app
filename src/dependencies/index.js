@@ -6,9 +6,11 @@ const { statusCode } = require('./http_status_code');
 const middlewares = require('./middlewares');
 const models = require('./models');
 const utils = require('./utils');
+const { generateUUID } = require('./uuid');
 
 module.exports = {
     allowedOriginsCors,
+    generateUUID,
     httpError,
     httpResponses,
     statusCode,
