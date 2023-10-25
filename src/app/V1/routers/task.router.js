@@ -9,7 +9,7 @@ const { taskRules } = require('../rules')
 
 //* Desestructuración de controladortes
 const { 
-    createTaskController, getTasksController, getTaskController, updateTaskController
+    createTaskController, getTasksController, getTaskController, updateTaskController, deleteTaskController
 } = taskControllers;
 
 //? Desestructuración de reglas
@@ -53,6 +53,13 @@ module.exports = (dependencies) => {
             updateTaskRule(middlewares),      //* Reglas update
         ],      
         updateTaskController( dependencies )  //* Controlador
+    );
+
+    //* Definición de servicios
+    taskRouter.delete(
+        '/task/:uuid_task',                   //* Servicio API
+        paramsTaskRule(middlewares),          //* Reglas
+        deleteTaskController( dependencies )  //* Controlador
     );
 
 
