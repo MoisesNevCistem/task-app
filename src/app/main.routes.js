@@ -5,7 +5,7 @@ const { Router } = require('express');
 const dependencies = require('../dependencies');
 
 //* Importación de enrutadores
-const { welcomeRouter } = require('./V1/routers')
+const { taskRouter, welcomeRouter } = require('./V1/routers')
 
 //* Desestructuración de dependencias
 const { httpError } = dependencies;
@@ -21,7 +21,8 @@ const appRouter = Router();
 const PATH_URL = '/api/v1/app';
 
 //* Servicios de server APP
-appRouter.use(`${ PATH_URL }`, welcomeRouter( dependencies ))
+appRouter.use(`${ PATH_URL }`, taskRouter( dependencies ));
+appRouter.use(`${ PATH_URL }`, welcomeRouter( dependencies ));
 
 //* Middlewares para control de errores
 appRouter.use( httpError.serviceNotFound );

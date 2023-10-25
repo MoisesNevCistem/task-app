@@ -19,6 +19,13 @@ const listErrors = {
             message: `The services '${ url }' is not available`,
             status_code: statusCode.NOT_FOUND
         })
+    },
+    VALIDATE_ERROR( error ){
+        return responseError({
+            code: 'B03',
+            message: error,
+            status_code: statusCode.BAD_REQUEST
+        })
     }
 }
 

@@ -12,5 +12,5 @@ module.exports = (dependencies) => {
 
     //* Definición de rutas
     welcomeRouter.get('/', welcomeController( dependencies ));
-    return welcomeRouter
+    return welcomeRouter;
 };
