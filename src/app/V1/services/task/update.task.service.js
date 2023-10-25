@@ -11,25 +11,30 @@ module.exports = ( dependencies ) =>{
 
     //? Centralización de casos de uso
     const caseRepository = {
-        getTasks: taskUsesCases.getOneTaskCase(models),
+        getTask: taskUsesCases.getOneTaskCase(models),
+        updateTask: taskUsesCases.updateTaskCase(models),
     };
 
     /**
-     * Servicio que validará los casos de uso de obtener una tarea.
+     * Servicio que validará los casos de uso para actualizar una tarea.
      * @param {string} uuidTask - Define el UUID de la tarea.
-     * @returns Resolución de servicio de obtener una tarea.
+     * @param {object} task - Define una tarea.
+     * @returns Resolución de servicio para actualizar una tarea.
      */
-    const getTaskService = async( uuidTask ) => {
+    const updateTaskService = async( uuidTask, taskToUpdate ) => {
 
-        //? Obtener tarea
-        const task = await caseRepository.getTasks(uuidTask);
+        //? Verifica que la tarea exista tarea
+        const task = await caseRepository.getTask(uuidTask);
 
         if( task === null ) throw new ExceptionError('TASK_NOT_FOUND');
 
+        //? Actualizar tarea
+        await caseRepository.updateTask(uuidTask, taskToUpdate);
+        
         return { 
             success: true,
             task
         };
     };
-    return getTaskService;
+    return updateTaskService;
 };

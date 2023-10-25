@@ -9,11 +9,11 @@ const { taskRules } = require('../rules')
 
 //* Desestructuración de controladortes
 const { 
-    createTaskController, getTasksController, getTaskController 
+    createTaskController, getTasksController, getTaskController, updateTaskController
 } = taskControllers;
 
 //? Desestructuración de reglas
-const { createTaskRule, paramsTaskRule } = taskRules;
+const { createTaskRule, paramsTaskRule, updateTaskRule } = taskRules;
 
 module.exports = (dependencies) => {
 
@@ -44,6 +44,17 @@ module.exports = (dependencies) => {
         paramsTaskRule(middlewares),          //* Reglas
         getTaskController( dependencies )     //* Controlador
     );
+
+    //* Definición de servicios
+    taskRouter.put(
+        '/task/:uuid_task',                   //* Servicio API
+        [
+            paramsTaskRule(middlewares),      //* Reglas params
+            updateTaskRule(middlewares),      //* Reglas update
+        ],      
+        updateTaskController( dependencies )  //* Controlador
+    );
+
 
     return taskRouter;
 };
