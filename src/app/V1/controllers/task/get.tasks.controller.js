@@ -29,7 +29,7 @@ module.exports = ( dependencies ) => {
                 });
             }
         } catch (error) {
-            console.log('❌ GET_TASK_CONTROLLER_ERROR: ', error);
+            // console.log('❌ GET_TASK_CONTROLLER_ERROR: ', error);
             next( error );
         }
     };

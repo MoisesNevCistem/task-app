@@ -8,31 +8,30 @@ module.exports = ( dependencies ) => {
 
     //? Centralización de servicios
     const serviceRepository = {
-        getTask: taskServices.getTaskService({ httpError, models }),
+        updateTask: taskServices.updateTaskService({ httpError, models }),
     };
 
     /**
-     * Controlador que coordina el proceso de obtener una tarea.
+     * Controlador que coordina el proceso de actualizar una tarea.
      * @param {*} req - Deinificón de la solicitud realizada.
      * @param {*} res - Definición de la respuesta capturada.
      * @param {*} next - Función que continua el flujo de la aplicación.
      */
-    const getTaskController = async ( req, res, next ) => {
+    const updateTaskController = async ( req, res, next ) => {
         try {
-            const serviceResponse = await serviceRepository.getTask( req.params.uuid_task );
-            const { success, task } = serviceResponse;
-            
-            if( success ){
+            const serviceResponse = await serviceRepository.updateTask( req.params.uuid_task, req.body );
+
+            if( serviceResponse ){
                 httpResponses.responseSuccess(res, {
                     status_code: statusCode.OK,
-                    data: task || {}
+                    data: { message: '✔ Task was updated....' }
                 });
             }
         } catch (error) {
-            // console.log('❌ GET_TASK_CONTROLLER_ERROR: ', error);
+            console.log('❌ UPDATE_TASK_CONTROLLER_ERROR: ', error);
             next( error );
         }
     };
 
-    return getTaskController;
+    return updateTaskController;
 };
