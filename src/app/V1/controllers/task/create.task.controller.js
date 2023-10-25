@@ -1,6 +1,5 @@
 //* Importación de servicios
 const { taskServices } = require('../../services');
-console.log('taskServices', taskServices);
 
 module.exports = ( dependencies ) => {
 
@@ -31,7 +30,7 @@ module.exports = ( dependencies ) => {
                 });
             }
         } catch (error) {
-            console.log('❌ CREATE_TASK_CONTROLLER_ERROR: ', error);
+            // console.log('❌ CREATE_TASK_CONTROLLER_ERROR: ', error);
             next( error );
         }
     }

@@ -8,7 +8,7 @@ const { taskControllers } = require('../controllers');
 const { taskRules } = require('../rules')
 
 //* Desestructuración de controladortes
-const { createTaskController } = taskControllers;
+const { createTaskController, getTaskController } = taskControllers;
 
 //? Desestructuración de reglas
 const { createTaskRule } = taskRules;
@@ -30,5 +30,10 @@ module.exports = (dependencies) => {
         createTaskController( dependencies )    //* Controlador
     );
 
+    //* Definición de servicios
+    taskRouter.get(
+        '/tasks',                            //* Servicio API
+        getTaskController( dependencies )    //* Controlador
+    );
     return taskRouter;
 };
