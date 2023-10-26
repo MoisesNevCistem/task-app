@@ -30,37 +30,5 @@ module.exports = (dependencies) => {
         createTaskStateRule(middlewares),            //* Reglas
         createTaskStateController( dependencies )    //* Controlador
     );
-
-    // //* Definición de servicios
-    // taskRouter.get(
-    //     '/tasks_state',                             //* Servicio API
-    //     getTasksController( dependencies )    //* Controlador
-    // );
-
-    // //* Definición de servicios
-    // taskRouter.get(
-    //     '/task/:uuid_task',                   //* Servicio API
-    //     paramsTaskRule(middlewares),          //* Reglas
-    //     getTaskController( dependencies )     //* Controlador
-    // );
-
-    // //* Definición de servicios
-    // taskRouter.put(
-    //     '/task/:uuid_task',                   //* Servicio API
-    //     [
-    //         paramsTaskRule(middlewares),      //* Reglas params
-    //         updateTaskRule(middlewares),      //* Reglas update
-    //     ],      
-    //     updateTaskController( dependencies )  //* Controlador
-    // );
-
-    // //* Definición de servicios
-    // taskRouter.delete(
-    //     '/task/:uuid_task',                   //* Servicio API
-    //     paramsTaskRule(middlewares),          //* Reglas
-    //     deleteTaskController( dependencies )  //* Controlador
-    // );
-
-
     return taskRouter;
 };
