@@ -4,7 +4,7 @@ const { taskStateUsesCases } = require('../../use_cases');
 module.exports = ( models ) =>{
     //? Centralización de casos de uso
     const caseRepository = {
-        getTasksState: taskStateUsesCases.getTasksStateCase(models),
+        getTasksState: taskStateUsesCases.updateTaskStateCase(models),
     };
 
     /**
