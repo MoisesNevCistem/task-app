@@ -8,7 +8,7 @@ const { taskStateControllers } = require('../controllers');
 const { taskRules, taskStateRules } = require('../rules')
 
 //* Desestructuración de controladortes
-const { createTaskStateController } = taskStateControllers;
+const { createTaskStateController, getTasksStateController, getTaskStateController } = taskStateControllers;
 
 //? Desestructuración de reglas
 const { paramsTaskRule } = taskRules;
@@ -22,13 +22,27 @@ module.exports = (dependencies) => {
     /**
      * @type {Router} Enrutador que coordina el servicio de tareas.
      */
-    const taskRouter = Router();
+    const taskStateRouter = Router();
     
     //* Definición de servicios
-    taskRouter.post(
+    taskStateRouter.post(
         '/new_task_state',                           //* Servicio API
         createTaskStateRule(middlewares),            //* Reglas
         createTaskStateController( dependencies )    //* Controlador
     );
-    return taskRouter;
+
+    //* Definición de servicios
+    taskStateRouter.get(
+        '/tasks_state',                               //* Servicio API
+        getTasksStateController( dependencies )       //* Controlador
+    );
+
+    //* Definición de servicios
+    taskStateRouter.get(
+        '/task_state/:uuid_validate',                 //* Servicio API
+        paramsTaskRule(middlewares),                  //* Reglas params
+        getTaskStateController( dependencies )        //* Controlador
+    );
+
+    return taskStateRouter;
 };

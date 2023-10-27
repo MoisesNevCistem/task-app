@@ -19,7 +19,7 @@ module.exports = ( dependencies ) => {
      */
     const getTaskController = async ( req, res, next ) => {
         try {
-            const serviceResponse = await serviceRepository.getTask( req.params.uuid_task );
+            const serviceResponse = await serviceRepository.getTask( req.params.uuid_validate );
             const { success, task } = serviceResponse;
             
             if( success ){

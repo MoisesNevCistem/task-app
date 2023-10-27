@@ -1,5 +1,5 @@
 //* Importación de servicios
-const { taskServices } = require('../../services');
+const { taskStateServices } = require('../../services');
 
 module.exports = ( dependencies ) => {
 
@@ -8,30 +8,30 @@ module.exports = ( dependencies ) => {
 
     //? Centralización de servicios
     const serviceRepository = {
-        deleteTask: taskServices.deleteTaskService({ httpError, models }),
+        getTaskState: taskStateServices.getTaskStateService({ httpError, models }),
     };
 
     /**
-     * Controlador que coordina el proceso de eliminar una tarea.
+     * Controlador que coordina el proceso de obtener una tarea.
      * @param {*} req - Deinificón de la solicitud realizada.
      * @param {*} res - Definición de la respuesta capturada.
      * @param {*} next - Función que continua el flujo de la aplicación.
      */
-    const deleteTaskController = async ( req, res, next ) => {
+    const getTaskStateController = async ( req, res, next ) => {
         try {
-            const serviceResponse = await serviceRepository.deleteTask( req.params.uuid_validate );
+            const serviceResponse = await serviceRepository.getTaskState( req.params.uuid_validate );
+            const { success, taskState } = serviceResponse;
             
-            if( serviceResponse ){
+            if( success ){
                 httpResponses.responseSuccess(res, {
                     status_code: statusCode.OK,
-                    data: {message: '❌ The Task was deleted....'}
+                    data: taskState || {}
                 });
             }
         } catch (error) {
-            console.log('❌ DELETE_TASK_CONTROLLER_ERROR: ', error);
             next( error );
         }
     };
 
-    return deleteTaskController;
+    return getTaskStateController;
 };

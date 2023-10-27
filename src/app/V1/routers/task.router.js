@@ -40,14 +40,14 @@ module.exports = (dependencies) => {
 
     //* Definición de servicios
     taskRouter.get(
-        '/task/:uuid_task',                   //* Servicio API
+        '/task/:uuid_validate',                   //* Servicio API
         paramsTaskRule(middlewares),          //* Reglas
         getTaskController( dependencies )     //* Controlador
     );
 
     //* Definición de servicios
     taskRouter.put(
-        '/task/:uuid_task',                   //* Servicio API
+        '/task/:uuid_validate',                   //* Servicio API
         [
             paramsTaskRule(middlewares),      //* Reglas params
             updateTaskRule(middlewares),      //* Reglas update
@@ -57,7 +57,7 @@ module.exports = (dependencies) => {
 
     //* Definición de servicios
     taskRouter.delete(
-        '/task/:uuid_task',                   //* Servicio API
+        '/task/:uuid_validate',                   //* Servicio API
         paramsTaskRule(middlewares),          //* Reglas
         deleteTaskController( dependencies )  //* Controlador
     );
