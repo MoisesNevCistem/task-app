@@ -2,9 +2,12 @@
 const createTaskStateCase = require('./create.task.state.case');
 const getTasksStateCase = require('./get.tasks.state.case');
 const getTaskStateCase = require('./get.task.state.case');
+const updateTaskStateCase = require('./update.task.state.case');
+
 
 module.exports = {
     createTaskStateCase,
     getTasksStateCase,
-    getTaskStateCase
+    getTaskStateCase,
+    updateTaskStateCase
 };
