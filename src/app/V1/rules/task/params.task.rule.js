@@ -8,7 +8,7 @@ module.exports = ( middlewares ) => {
     const { validateResult } = middlewares;
 
     return[
-        check('uuid_task')
+        check('uuid_validate')
         .notEmpty().withMessage("The field 'UUID Task' is required....")
         .isUUID('4').withMessage("The field 'UUID Task' is not validate...."),
         validateResult

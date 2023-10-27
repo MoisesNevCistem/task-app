@@ -8,7 +8,7 @@ module.exports = ( dependencies ) => {
 
     //? Centralización de servicios
     const serviceRepository = {
-        getTasksState: taskStateServices.getTaskStateService(models),
+        getTasksState: taskStateServices.getTasksStateService(models),
     };
 
     /**
