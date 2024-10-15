@@ -16,4 +16,4 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh "Desarrollo Cistem@localhost" "cd /z/Documents/example/task-app && git pull origin staging && pm2 restart task-app"
+          ssh "Desarrollo Cistem@192.168.0.130" "cd /z/Documents/example/task-app && git pull origin staging && pm2 restart task-app"
