@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+name: Deploy to Windows
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Windows
+        run: |
+          ssh "Desarrollo Cistem@localhost" "cd /z/Documents/example/task-app && git pull origin staging && pm2 restart task-app"
