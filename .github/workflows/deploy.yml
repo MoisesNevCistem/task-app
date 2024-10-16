@@ -8,16 +8,17 @@ on:
 
 jobs:
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Ping to check connectivity
-        run: |
-          ping 189.202.87.246 -n 4
-          
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Deploy to Windows
         run: |
           ssh -p 22 "Desarrollo Cistem@189.202.87.246" "cd /z/Documents/example/task-app && git pull origin staging && pm2 restart task-app"
