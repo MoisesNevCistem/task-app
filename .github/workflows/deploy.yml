@@ -21,10 +21,10 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh -v -p 22 "Desarrollo Cistem@189.202.87.246" "
+          ssh -v -p 22 "Desarrollo Cistem@189.202.87.246" << 'EOF'
             cd /z/Documents/example/task-app &&
             git pull origin staging &&
             npm install &&
             npm run dev &&
             pm2 restart task-app
-          "
+          EOF
