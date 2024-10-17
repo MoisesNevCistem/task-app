@@ -21,8 +21,8 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh -v -p 22 desarrollo\\cistem@189.202.87.246 << 'EOF'
-            cd /z/Documents/example/task-app &&
+          ssh -v -p 22 Administrator@107.178.98.246 << 'EOF'
+            cd /c/Cistem/dev/task-app &&
             git pull origin staging &&
             npm install &&
             npm run dev &&
