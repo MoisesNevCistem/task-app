@@ -52,4 +52,6 @@ jobs:
 
             # Reiniciar o iniciar el servidor
             pm2 restart task-app || pm2 start npm --name "task-app" -- run dev || { echo "Error al iniciar el servidor"; exit 1; }
+
+            echo "Despliegue completado exitosamente"
           EOF
