@@ -19,12 +19,28 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Add Windows Host to Known Hosts
+        run: |
+          ssh-keyscan -H 107.178.98.246 >> ~/.ssh/known_hosts
+
       - name: Deploy to Windows
         run: |
-          ssh -v -p 22 Administrator@107.178.98.246 << 'EOF'
-            cd /c/Cistem/dev/task-app &&
-            git pull origin staging &&
-            npm install &&
-            npm run dev &&
-            pm2 restart task-app
+          ssh -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
+            # Cambiar directorio de la aplicación
+            cd /c/Cistem/dev/task-app
+
+            # Asegurarse de que git está en el PATH (necesario en Windows)
+            if ! git --version > /dev/null 2>&1; then
+              echo "Git no está en el PATH, añadiendo temporalmente"
+              export PATH=$PATH:/c/Program\ Files/Git/bin
+            fi
+
+            # Actualizar la aplicación
+            git pull origin staging
+
+            # Instalar dependencias
+            npm install
+
+            # Ejecutar el servidor en modo desarrollo o reiniciar con pm2
+            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev
           EOF
