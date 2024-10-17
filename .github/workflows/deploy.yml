@@ -14,10 +14,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Install sshpass
+        run: sudo apt-get install sshpass
 
       - name: Add Windows Host to Known Hosts
         run: |
@@ -25,7 +23,7 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
+          sshpass -p "${{ secrets.PWD_KEY }}" ssh -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
             # Cambiar directorio de la aplicación
             cd /c/Cistem/dev/task-app || { echo "Error al cambiar de directorio"; exit 1; }
 
