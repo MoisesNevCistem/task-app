@@ -27,20 +27,29 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
             # Cambiar directorio de la aplicación
-            cd /c/Cistem/dev/task-app
+            cd /c/Cistem/dev/task-app || { echo "Error al cambiar de directorio"; exit 1; }
 
-            # Asegurarse de que git está en el PATH (necesario en Windows)
+            # Verificar si Git está en el PATH
             if ! git --version > /dev/null 2>&1; then
               echo "Git no está en el PATH, añadiendo temporalmente"
-              export PATH=$PATH:/c/Program\ Files/Git/bin
+              export PATH=$PATH:"/c/Program Files/Git/bin"
             fi
 
+            # Verificar si Git está instalado
+            git --version || { echo "Git no está instalado"; exit 1; }
+
             # Actualizar la aplicación
-            git pull origin staging
+            git pull origin staging || { echo "Error al hacer git pull"; exit 1; }
+
+            # Verificar si npm está disponible
+            npm --version || { echo "npm no está instalado"; exit 1; }
 
             # Instalar dependencias
-            npm install
+            npm install || { echo "Error al instalar dependencias"; exit 1; }
 
-            # Ejecutar el servidor en modo desarrollo o reiniciar con pm2
-            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev
+            # Verificar si pm2 está disponible
+            pm2 --version || { echo "pm2 no está instalado"; exit 1; }
+
+            # Reiniciar o iniciar el servidor
+            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev || { echo "Error al iniciar el servidor"; exit 1; }
           EOF
