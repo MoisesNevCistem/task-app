@@ -21,7 +21,7 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh -o StrictHostKeyChecking=no -v -p 22 Administrator@107.178.98.246 << 'EOF'
+          ssh -v -p 22 Administrator@107.178.98.246 << 'EOF'
             cd /c/Cistem/dev/task-app &&
             git pull origin staging &&
             npm install &&
