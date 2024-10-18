@@ -38,6 +38,13 @@ jobs:
             git pull origin staging
             npm install
             npm install -g pm2
-            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev
+            
+            # Comprobar si el proceso existe antes de reiniciar
+            if pm2 list | grep -q "task-app"; then
+              pm2 restart task-app
+            else
+              pm2 start npm --name "task-app" -- run dev
+            fi
+
             echo "Despliegue completado exitosamente"
           EOF
