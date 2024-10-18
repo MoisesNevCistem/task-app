@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy to Windows
         run: |
-          ssh -vvv -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
+          ssh -v -o StrictHostKeyChecking=no -p 22 Administrator@107.178.98.246 << 'EOF'
             # Cambiar directorio de la aplicación
             cd /c/Cistem/dev/task-app || { echo "Error al cambiar de directorio"; exit 1; }
 
