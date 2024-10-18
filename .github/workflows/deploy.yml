@@ -15,9 +15,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          # Guarda la clave privada en un archivo
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_github_moy
+          chmod 600 ~/.ssh/id_rsa_github_moy
 
       - name: Add Windows Host to Known Hosts
         run: |
