@@ -16,9 +16,7 @@ jobs:
 
       - name: Set up SSH
         run: |
-          # Crea el directorio .ssh si no existe
           mkdir -p ~/.ssh
-          # Guarda la clave privada en un archivo
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
@@ -37,9 +35,9 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=keyboard-interactive,password -p 22 administrator@107.178.98.246 << 'EOF'
             # Cambiar a PowerShell
-            powershell.exe -Command "
+            powershell.exe -Command "& {
               # Cambiar directorio de la aplicación
-              Set-Location 'C:\Cistem\dev\task-app'; 
+              Set-Location -Path 'C:\Cistem\dev\task-app'; 
 
               # Verificar si estamos en el repositorio de Git
               if (!(Test-Path .git)) {
@@ -57,5 +55,5 @@ jobs:
               pm2 restart task-app || pm2 start npm --name 'task-app' -- run dev || { Write-Host 'Error al iniciar el servidor'; exit 1; }
 
               Write-Host 'Despliegue completado exitosamente';
-            "
+            }"
           EOF
