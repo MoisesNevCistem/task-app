@@ -37,6 +37,7 @@ jobs:
             cd C:\Cistem\dev\task-app
             git pull origin staging
             npm install
+            npm install -g pm2
             pm2 restart task-app || pm2 start npm --name "task-app" -- run dev
             echo "Despliegue completado exitosamente"
           EOF
