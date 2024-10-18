@@ -8,7 +8,7 @@ module.exports = ( models ) => {
      * @param {object} newTask.uuid_task - Define el codigo UUID de la tarea.
      * @param {object} newTask.title - Define el titulo de una tarea.
      * @param {object} newTask.task_description - Define la descripcion de una tarea.
-     * @param {object} prueba no 1 update
+     * @param {object} prueba no 1 updates
      * @return Tarea Creada.
      */
     const createTaskCase = async( newTask ) => {
