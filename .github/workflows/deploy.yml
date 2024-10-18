@@ -36,29 +36,26 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }} # Carga la contraseña desde los secretos
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=keyboard-interactive,password -p 22 administrator@107.178.98.246 << 'EOF'
-            # Cambiar directorio de la aplicación
-            cd /c/Cistem/dev/task-app || { echo "Error al cambiar de directorio"; exit 1; }
+            # Cambiar a PowerShell
+            powershell.exe -Command "
+              # Cambiar directorio de la aplicación
+              Set-Location 'C:\Cistem\dev\task-app'; 
 
-            # Verificar el estado del repositorio
-            git status || { echo "Error: el repositorio tiene cambios sin confirmar"; exit 1; }
+              # Verificar si estamos en el repositorio de Git
+              if (!(Test-Path .git)) {
+                Write-Host 'Error: no es un repositorio de Git';
+                exit 1;
+              }
 
-            # Asegurarse de estar en la rama correcta
-            git checkout staging || { echo "Error al cambiar a la rama staging"; exit 1; }
+              # Actualizar la aplicación
+              git pull origin staging || { Write-Host 'Error al hacer git pull'; exit 1; }
 
-            # Actualizar la aplicación
-            git pull origin staging || { echo "Error al hacer git pull: $?" ; exit 1; }
+              # Instalar dependencias
+              npm install || { Write-Host 'Error al instalar dependencias'; exit 1; }
 
-            # Verificar si npm está disponible
-            npm --version || { echo "npm no está instalado"; exit 1; }
+              # Reiniciar o iniciar el servidor
+              pm2 restart task-app || pm2 start npm --name 'task-app' -- run dev || { Write-Host 'Error al iniciar el servidor'; exit 1; }
 
-            # Instalar dependencias
-            npm install || { echo "Error al instalar dependencias"; exit 1; }
-
-            # Verificar si pm2 está disponible
-            pm2 --version || { echo "pm2 no está instalado"; exit 1; }
-
-            # Reiniciar o iniciar el servidor
-            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev || { echo "Error al iniciar el servidor"; exit 1; }
-
-            echo "Despliegue completado exitosamente"
+              Write-Host 'Despliegue completado exitosamente';
+            "
           EOF
