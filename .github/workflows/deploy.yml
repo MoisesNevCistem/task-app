@@ -17,8 +17,8 @@ jobs:
       - name: Set up SSH
         run: |
           # Guarda la clave privada en un archivo
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_github_moy
-          chmod 600 ~/.ssh/id_rsa_github_moy
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: Add Windows Host to Known Hosts
         run: |
