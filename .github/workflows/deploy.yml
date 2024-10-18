@@ -34,24 +34,9 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }} # Carga la contraseña desde los secretos
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=keyboard-interactive,password -p 22 administrator@107.178.98.246 << 'EOF'
-            powershell.exe -Command " 
-              # Cambiar directorio de la aplicación
-              Set-Location -Path 'C:\Cistem\dev\task-app'; 
-
-              # Verificar si estamos en el repositorio de Git
-              if (!(Test-Path .git)) {
-                Write-Host 'Error: no es un repositorio de Git'; exit 1;
-              }
-
-              # Actualizar la aplicación
-              git pull origin staging || { Write-Host 'Error al hacer git pull'; exit 1; }
-
-              # Instalar dependencias
-              npm install || { Write-Host 'Error al instalar dependencias'; exit 1; }
-
-              # Reiniciar o iniciar el servidor
-              pm2 restart task-app || pm2 start npm --name 'task-app' -- run dev || { Write-Host 'Error al iniciar el servidor'; exit 1; }
-
-              Write-Host 'Despliegue completado exitosamente';
-            "
+            cd C:\Cistem\dev\task-app
+            git pull origin staging
+            npm install
+            pm2 restart task-app || pm2 start npm --name "task-app" -- run dev
+            echo "Despliegue completado exitosamente"
           EOF
