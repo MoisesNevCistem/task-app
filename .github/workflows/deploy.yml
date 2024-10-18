@@ -23,6 +23,7 @@ jobs:
       - name: Add Windows Host to Known Hosts
         run: |
           ssh-keyscan -H 107.178.98.246 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts  # Asegurarse de que tenga permisos correctos
 
       - name: Install sshpass
         run: |
@@ -33,7 +34,7 @@ jobs:
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }} # Carga la contraseña desde los secretos
         run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=keyboard-interactive,password -p 22 administrator@107.178.98.246 << 'EOF'
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
             git pull origin staging
             npm install
