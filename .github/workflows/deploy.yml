@@ -16,6 +16,8 @@ jobs:
 
       - name: Set up SSH
         run: |
+          # Crea el directorio .ssh si no existe
+          mkdir -p ~/.ssh
           # Guarda la clave privada en un archivo
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
