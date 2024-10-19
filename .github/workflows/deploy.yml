@@ -42,7 +42,7 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull origin staging
+            git -c core.sshCommand="ssh -o StrictHostKeyChecking=no" pull origin staging  # Omitir verificación de clave de host
             npm install
             npm run dev
             echo "Despliegue completado exitosamente"
