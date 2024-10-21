@@ -14,6 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
@@ -23,8 +31,7 @@ jobs:
       - name: Add Windows Host to Known Hosts
         run: |
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts  # Verifica que el host ha sido agregado correctamente
-          chmod 644 ~/.ssh/known_hosts  # Asegura que los permisos son correctos
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Install sshpass
         run: |
@@ -38,8 +45,8 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
+            git pull --depth 1 https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
           EOF
 
       - name: Final message
-        run: echo "Pull realiza en MV"
+        run: echo "Pull realizado en MV"
