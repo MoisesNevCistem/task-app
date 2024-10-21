@@ -38,11 +38,13 @@ jobs:
 
       - name: Deploy to Windows
         env:
-          SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}  # Carga la contraseña desde los secretos
+          SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull origin staging
+            eval $(ssh-agent)  # Inicia el agente SSH
+            ssh-add C:/Users/Administrator/.ssh/id_rsa_github_moy  # Añade la clave privada específica al agente SSH
+            git pull git@github.com:MoisesNevCistem/task-app.git staging  # Usa la URL SSH
             npm install
             npm run dev
             echo "Despliegue completado exitosamente"
