@@ -39,10 +39,11 @@ jobs:
       - name: Deploy to Windows
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
+          ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}  # Cargar el token desde los secretos
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull https://MoisesNevCistem:<TOKEN>@github.com/MoisesNevCistem/task-app.git staging
+            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
             npm install
             npm run dev
             echo "Despliegue completado exitosamente"
