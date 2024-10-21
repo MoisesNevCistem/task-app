@@ -26,6 +26,16 @@ jobs:
           cat ~/.ssh/known_hosts  # Verifica que el host ha sido agregado correctamente
           chmod 644 ~/.ssh/known_hosts  # Asegura que los permisos son correctos
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.npm
+            !~/.npmrc
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install sshpass
         run: |
           sudo apt-get update
@@ -34,12 +44,11 @@ jobs:
       - name: Deploy to Windows
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
-          ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}  # Cargar el token desde los secretos
+          ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
-            echo "Cambios descargados exitosamente"
           EOF
 
       - name: Final message
