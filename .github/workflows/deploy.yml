@@ -23,25 +23,13 @@ jobs:
       - name: Add Windows Host to Known Hosts
         run: |
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts  # Verifica que el host ha sido agregado correctamente
-          chmod 644 ~/.ssh/known_hosts  # Asegura que los permisos son correctos
-
-      - name: Debug SSH Known Hosts
-        run: |
-          echo "Known hosts:"
-          cat ~/.ssh/known_hosts  # Debug para verificar los hosts conocidos
-
-      - name: Install sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
 
       - name: Deploy to Windows
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
           ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}  # Cargar el token desde los secretos
         run: |
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
             echo "Cambios descargados exitosamente"
