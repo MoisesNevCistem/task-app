@@ -35,10 +35,9 @@ jobs:
 
       - name: Ensure sshpass is installed
         run: |
-          if ! dpkg-query -W -f='${Status}' sshpass 2>/dev/null | grep -q "install ok installed"; then
+          if ! command -v sshpass &> /dev/null; then
             echo "sshpass not found, installing..."
-            sudo apt-get update -qq
-            sudo apt-get install -y sshpass
+            sudo apt-get update -qq && sudo apt-get install -y sshpass
           else
             echo "sshpass is already installed, skipping installation."
           fi
