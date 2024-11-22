@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
-name: Sync Latest Code to Windows Server  # Nombre del flujo de trabajo actualizado
+name: Sync Latest Code to Windows Server
 
 on:
   push:
@@ -7,22 +7,22 @@ on:
       - staging
 
 jobs:
-  update-server:  # Nombre del trabajo actualizado
+  update-server:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Usando la última versión de actions/checkout
+        uses: actions/checkout@v3
 
       - name: Set up Node.js (latest LTS)
-        uses: actions/setup-node@v3  # Configurando la versión más reciente de Node.js LTS
+        uses: actions/setup-node@v3
         with:
           node-version: '20'  # Usando Node.js 20, se puede usar otra versión
 
       - name: Cache sshpass binary
         uses: actions/cache@v3
         with:
-          path: ~/.cache/sshpass  # Cambié la ruta para usar ~/.cache/sshpass, asegúrate que esta ruta exista
+          path: /usr/bin/sshpass  # Ruta absoluta de sshpass
           key: ${{ runner.os }}-sshpass
           restore-keys: |
             ${{ runner.os }}-sshpass-
@@ -47,7 +47,7 @@ jobs:
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Update Windows Server with GitHub Code  # Nombre del paso actualizado
+      - name: Update Windows Server with GitHub Code
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
           ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
