@@ -47,7 +47,8 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git config --global credential.helper "store --file=/dev/null"
+            # Evitar el helper de credenciales y forzar la URL con el token
+            git config --global --unset credential.helper
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
