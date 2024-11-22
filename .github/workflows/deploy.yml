@@ -28,27 +28,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Instalación de dependencias solo si no están en el caché
-      - name: Install dependencies (only if necessary)
+      - name: Install dependencies (with npm ci)
         run: |
           if [ ! -d "node_modules" ]; then
             echo "Instalando dependencias con npm ci..."
-            npm ci  # Solo se ejecuta si no están en caché
+            npm ci  # Utiliza npm ci para instalaciones más rápidas en CI
           else
             echo "Las dependencias ya están instaladas, usando caché."
           fi
 
-      # Consolidación de configuración SSH y actualización del servidor
       - name: Set up SSH and Update Windows Server
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          # Agregar la clave pública del servidor al archivo known_hosts
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
+          # Ejecutar git pull directamente con la clave SSH
+          ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
+            git pull https://MoisesNevCistem:${{ secrets.ACC_TOKEN }}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
       - name: Final message
