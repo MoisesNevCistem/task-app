@@ -33,11 +33,11 @@ jobs:
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Install sshpass (if not already installed)
+      - name: Ensure sshpass is installed
         run: |
-          if ! command -v sshpass &> /dev/null; then
+          if ! dpkg-query -W -f='${Status}' sshpass 2>/dev/null | grep -q "install ok installed"; then
             echo "sshpass not found, installing..."
-            sudo apt-get update
+            sudo apt-get update -qq
             sudo apt-get install -y sshpass
           else
             echo "sshpass is already installed, skipping installation."
