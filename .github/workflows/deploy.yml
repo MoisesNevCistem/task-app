@@ -26,7 +26,7 @@ jobs:
         run: |
           if ! command -v sshpass &> /dev/null; then
             echo "sshpass not found, installing..."
-            sudo apt-get install -y sshpass
+            sudo apt-get update -qq && sudo apt-get install -y sshpass
           else
             echo "sshpass is already installed or restored from cache."
           fi
@@ -36,7 +36,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Omitimos el `ssh-keyscan` si ya tienes la clave configurada
+          ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy to Windows
@@ -46,8 +46,8 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git fetch origin staging
-            git reset --hard origin/staging
+            git checkout -- .
+            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
       - name: Final message
