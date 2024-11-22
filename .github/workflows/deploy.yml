@@ -37,15 +37,17 @@ jobs:
             echo "Las dependencias ya están instaladas, usando caché."
           fi
 
-      - name: Set up SSH and Update Windows Server
+      - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Agregar la clave pública del servidor al archivo known_hosts
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          # Ejecutar git pull directamente con la clave SSH
+
+      - name: Update Windows Server with GitHub Code
+        run: |
+          # Conexión SSH directa con clave privada
           ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
             git pull https://MoisesNevCistem:${{ secrets.ACC_TOKEN }}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
