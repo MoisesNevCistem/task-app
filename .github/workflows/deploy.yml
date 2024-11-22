@@ -17,12 +17,12 @@ jobs:
       - name: Set up Node.js (latest LTS)
         uses: actions/setup-node@v3  # Configurando la versión más reciente de Node.js LTS
         with:
-          node-version: '20'  # Usando Node 20, se puede usar otra versión
+          node-version: '20'  # Usando Node.js 20, se puede usar otra versión
 
       - name: Cache sshpass binary
         uses: actions/cache@v3
         with:
-          path: ~/.sshpass_cache  # Se cambiará la ruta para almacenar la caché en una ubicación diferente
+          path: ~/.cache/sshpass  # Cambié la ruta para usar ~/.cache/sshpass, asegúrate que esta ruta exista
           key: ${{ runner.os }}-sshpass
           restore-keys: |
             ${{ runner.os }}-sshpass-
