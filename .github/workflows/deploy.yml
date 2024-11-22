@@ -14,25 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Paso 2: Configuración de Node.js (solo si es necesario)
+      # Paso 2: Configuración de Node.js
       - name: Set up Node.js (latest LTS)
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Usando Node.js 20
+          node-version: '20'
 
-      # Paso 3: Instalar dependencias de Node.js (para asegurar que las rutas existan)
-      - name: Install dependencies
-        run: |
-          npm install
-
-      # Paso 4: Verificar que las rutas existan antes de intentar almacenar en caché
-      - name: Check if cache paths exist
-        run: |
-          echo "Verificando rutas para la caché..."
-          ls -l ~/.npm
-          ls -l node_modules || echo "node_modules no encontrado"
-
-      # Paso 5: Caché de dependencias de Node.js
+      # Paso 3: Caché de dependencias de Node.js (para optimizar el tiempo)
       - name: Cache Node.js dependencies
         uses: actions/cache@v3
         with:
@@ -43,7 +31,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Paso 6: Configuración SSH
+      # Paso 4: Instalar dependencias si no están en caché
+      - name: Install dependencies if cache not found
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "Instalando dependencias..."
+            npm install
+          else
+            echo "Las dependencias ya están instaladas, usando caché."
+          fi
+
+      # Paso 5: Configuración SSH
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
@@ -52,7 +50,7 @@ jobs:
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      # Paso 7: Actualización del servidor Windows con el último código desde GitHub
+      # Paso 6: Actualización del servidor Windows con el último código desde GitHub
       - name: Update Windows Server with GitHub Code
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
@@ -63,6 +61,6 @@ jobs:
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
-      # Paso 8: Mensaje final
+      # Paso 7: Mensaje final
       - name: Final message
         run: echo "Pull realizado en el servidor Windows con éxito"
