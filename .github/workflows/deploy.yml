@@ -15,11 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Paso 2: Configuración de Node.js (usamos la última versión LTS)
+      # Paso 2: Configuración de Node.js (solo si es necesario)
       - name: Set up Node.js (latest LTS)
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Usando Node.js 20, se puede usar otra versión
+          node-version: '20'  # Usando Node.js 20
 
       # Paso 3: Caché de dependencias de Node.js para mejorar tiempos de instalación
       - name: Cache Node.js dependencies
@@ -30,29 +30,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Paso 4: Instalación de sshpass si es necesario
-      - name: Install sshpass
-        run: |
-          if ! command -v sshpass &> /dev/null; then
-            echo "sshpass not found, installing..."
-            sudo apt-get update -qq && sudo apt-get install -y sshpass
-          else
-            echo "sshpass is already installed."
-          fi
-
-      # Paso 5: Configuración SSH (se asume que las claves están correctamente configuradas en el servidor)
+      # Paso 4: Configuración SSH (asegúrate de que las claves SSH están en los secretos del repositorio)
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          
           # Añadir la clave del servidor al archivo known_hosts si no está ya
-          touch ~/.ssh/known_hosts
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      # Paso 6: Actualización del servidor Windows con el último código desde GitHub
+      # Paso 5: Actualización del servidor Windows con el último código desde GitHub
       - name: Update Windows Server with GitHub Code
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
@@ -60,10 +48,9 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git config --global --unset credential.helper  # Desactiva el helper de credenciales de Windows
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
-      # Paso 7: Mensaje final
+      # Paso 6: Mensaje final
       - name: Final message
         run: echo "Pull realizado en el servidor Windows con éxito"
