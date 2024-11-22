@@ -22,7 +22,7 @@ jobs:
       - name: Cache sshpass binary
         uses: actions/cache@v3
         with:
-          path: /usr/bin/sshpass  # Ruta absoluta de sshpass
+          path: ./.cache/sshpass/  # Ruta personalizada para el almacenamiento de sshpass
           key: ${{ runner.os }}-sshpass
           restore-keys: |
             ${{ runner.os }}-sshpass-
