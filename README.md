@@ -43,7 +43,3 @@ A continuación, siga lo siguientes pasos de instalación y configuración:
    ```
 
 Hola mundo 💛
-
-Hola mi amor Daniel ;)
-
-Hola mi amor Moises 👉🏻![alt text](image.png)
