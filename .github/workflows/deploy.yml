@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Actualización a la versión más reciente de actions/checkout
 
       - name: Cache sshpass binary
         uses: actions/cache@v3
@@ -34,22 +34,19 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-
-          # Asegurarse de que la clave SSH privada esté configurada correctamente
+          
+          # Configuración de la clave privada SSH
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-          # Evitar re-creación innecesaria del archivo known_hosts
-          if [ ! -f ~/.ssh/known_hosts ]; then
-            touch ~/.ssh/known_hosts
-          fi
-
-          # Solo agregar la clave si no está presente
-          if ! grep -q "107.178.98.246" ~/.ssh/known_hosts; then
-            ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
-          fi
+          
+          # Configuración del archivo known_hosts
+          # Elimina el archivo known_hosts si existe y lo vuelve a crear, para evitar claves repetidas.
+          rm -f ~/.ssh/known_hosts
+          touch ~/.ssh/known_hosts
+          
+          # Escanea y agrega la clave del servidor
+          ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-        shell: /usr/bin/bash -e {0}
 
       - name: Update Windows Server with GitHub Code  # Nombre del paso actualizado
         env:
