@@ -14,15 +14,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3  # Usando la última versión de actions/checkout
 
-      - name: Set up Node.js (opcional)
-        uses: actions/setup-node@v3  # Solo si deseas configurar una versión de Node.js
+      - name: Set up Node.js (latest LTS)
+        uses: actions/setup-node@v3  # Configurando la versión más reciente de Node.js LTS
         with:
-          node-version: '20'  # Puedes usar '16' o '20' si prefieres una versión actualizada
+          node-version: '20'  # Usando Node 20, se puede usar otra versión
 
       - name: Cache sshpass binary
         uses: actions/cache@v3
         with:
-          path: /usr/bin/sshpass
+          path: ~/.sshpass_cache  # Se cambiará la ruta para almacenar la caché en una ubicación diferente
           key: ${{ runner.os }}-sshpass
           restore-keys: |
             ${{ runner.os }}-sshpass-
