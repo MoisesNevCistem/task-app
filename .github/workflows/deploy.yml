@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
-name: Deploy to Windows
+name: Sync Latest Code to Windows Server  # Nombre del flujo de trabajo actualizado
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - staging
 
 jobs:
-  deploy:
+  update-server:  # Nombre del trabajo actualizado
     runs-on: ubuntu-latest
 
     steps:
@@ -36,10 +36,13 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          
+          # Crear el archivo known_hosts si no existe y añadir la clave del servidor
+          touch ~/.ssh/known_hosts
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Deploy to Windows
+      - name: Update Windows Server with GitHub Code  # Nombre del paso actualizado
         env:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
           ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
