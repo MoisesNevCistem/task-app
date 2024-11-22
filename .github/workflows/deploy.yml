@@ -21,22 +21,23 @@ jobs:
         with:
           node-version: '20'  # Usando Node.js 20
 
-      # Paso 3: Caché de dependencias de Node.js para mejorar tiempos de instalación
+      # Paso 3: Caché de dependencias de Node.js (solo si se usa npm)
       - name: Cache Node.js dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: |
+            ~/.npm
+            node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Paso 4: Configuración SSH (asegúrate de que las claves SSH están en los secretos del repositorio)
+      # Paso 4: Configuración SSH
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Añadir la clave del servidor al archivo known_hosts si no está ya
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
