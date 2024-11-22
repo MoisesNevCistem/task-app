@@ -29,13 +29,19 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies (with npm ci)
-        run: npm ci
+        run: |
+          if [ ! -d "node_modules" ]; then
+            echo "Instalando dependencias con npm ci..."
+            npm ci  # Utiliza npm ci para instalaciones más rápidas en CI
+          else
+            echo "Las dependencias ya están instaladas, usando caché."
+          fi
 
       - name: Set up SSH
         run: |
-          eval $(ssh-agent -s)
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add -
           mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
@@ -46,7 +52,7 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull --rebase https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging
+            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
       - name: Final message
