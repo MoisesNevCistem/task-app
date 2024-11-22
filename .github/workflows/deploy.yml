@@ -14,33 +14,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Cache Node.js modules
+      - name: Cache sshpass binary
         uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          path: /usr/bin/sshpass
+          key: ${{ runner.os }}-sshpass
           restore-keys: |
-            ${{ runner.os }}-npm-
+            ${{ runner.os }}-sshpass-
+
+      - name: Install sshpass if not cached
+        run: |
+          if ! command -v sshpass &> /dev/null; then
+            echo "sshpass not found, installing..."
+            sudo apt-get update -qq && sudo apt-get install -y sshpass
+          else
+            echo "sshpass is already installed or restored from cache."
+          fi
 
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
-      - name: Add Windows Host to Known Hosts
-        run: |
           ssh-keyscan -p 22 -H 107.178.98.246 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-
-      - name: Ensure sshpass is installed
-        run: |
-          if ! command -v sshpass &> /dev/null; then
-            echo "sshpass not found, installing..."
-            sudo apt-get update -qq && sudo apt-get install -y sshpass
-          else
-            echo "sshpass is already installed, skipping installation."
-          fi
 
       - name: Deploy to Windows
         env:
