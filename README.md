@@ -41,7 +41,3 @@ A continuación, siga lo siguientes pasos de instalación y configuración:
    ⚡ [APP]: running at http://<ip-domain>:<port>
    ⚡ [AUTH]: running at http://<ip-domain>:<port>
    ```
-
-Hola mundo 💛
-
-Este es un mensaje de prueba...
