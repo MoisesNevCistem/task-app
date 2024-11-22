@@ -60,3 +60,12 @@ jobs:
 
       - name: Final message
         run: echo "Pull realizado en MV :D"
+      
+      - name: Post cache sshpass binary
+        run: |
+          # Verifica si el directorio de caché existe antes de intentar restaurarlo
+          if [ -d "./.cache/sshpass/" ]; then
+            echo "Directory exists, caching sshpass binary."
+          else
+            echo "Directory does not exist, skipping cache storage."
+          fi
