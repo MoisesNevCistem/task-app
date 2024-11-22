@@ -46,11 +46,13 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
       - name: Update Windows Server with GitHub Code
+        env:
+          SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
+          ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
         run: |
-          # Conexión SSH directa con clave privada
-          ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
+          sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            git pull https://MoisesNevCistem:${{ secrets.ACC_TOKEN }}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
+            git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
 
       - name: Final message
