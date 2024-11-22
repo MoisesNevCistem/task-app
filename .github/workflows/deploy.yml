@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '20'  # Usando Node.js 20, se puede usar otra versión
 
-      # Se asegura de no almacenar en caché el ejecutable 'sshpass' ya que puede haber problemas
+      # Instala 'sshpass' si no está instalado
       - name: Install sshpass
         run: |
           if ! command -v sshpass &> /dev/null; then
@@ -45,9 +45,9 @@ jobs:
           SSH_PASSWORD: ${{ secrets.SSH_PWD_USER }}
           ACCESS_TOKEN: ${{ secrets.ACC_TOKEN }}
         run: |
+          # Evitar el helper de credenciales y forzar la URL con el token
           sshpass -p "$SSH_PASSWORD" ssh -T -o StrictHostKeyChecking=no -p 22 administrator@107.178.98.246 << 'EOF'
             cd C:\Cistem\dev\task-app
-            # Evitar el helper de credenciales y forzar la URL con el token
             git config --global --unset credential.helper
             git pull https://MoisesNevCistem:${ACCESS_TOKEN}@github.com/MoisesNevCistem/task-app.git staging --allow-unrelated-histories
           EOF
